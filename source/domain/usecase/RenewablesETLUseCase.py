@@ -59,12 +59,12 @@ class RenewablesETLUseCase:
                 logging.error(f"Exception when fetching data on {date}: {e}")
         return results
 
-    def _process_and_transform_data(self, data, renewable=RENEWABLE.SOLAR, timestamp_key='Naive_Timestamp ', new_key='Timestamp_UTC'):
+    def _process_and_transform_data(self, data, renewable=RENEWABLE.SOLAR, timestamp_key='Naive_Timestamp ',
+                                    new_key='Timestamp_UTC'):
         for record in data:
             try:
                 if timestamp_key in record:
 
-                    transformed_timestamp = ''
                     if renewable == self.RENEWABLE.WIND:
                         transformed_timestamp = parser.parse(record[timestamp_key]).astimezone(timezone.utc)
                     else:
