@@ -5,7 +5,7 @@ from enum import Enum
 from dateutil import parser
 
 
-class FetchSolarAndWindDataUseCase:
+class RenewablesETLUseCase:
 
     def __init__(self, solar_repository, wind_repository):
         self.solar_repo = solar_repository

@@ -1,8 +1,7 @@
 import pytest
 from unittest.mock import AsyncMock, patch
 from datetime import datetime, timezone, timedelta
-from source.domain.usecase.RenewablesETLUseCase import \
-    FetchSolarAndWindDataUseCase  # Update this import based on your actual module structure
+from source.domain.usecase.RenewablesETLUseCase import RenewablesETLUseCase
 
 
 @pytest.fixture
@@ -25,7 +24,7 @@ def wind_repo():
 
 @pytest.fixture
 def use_case(solar_repo, wind_repo):
-    return FetchSolarAndWindDataUseCase(solar_repo, wind_repo)
+    return RenewablesETLUseCase(solar_repo, wind_repo)
 
 @pytest.mark.asyncio
 async def test_execute(use_case, solar_repo, wind_repo):
@@ -40,13 +39,13 @@ async def test_execute(use_case, solar_repo, wind_repo):
 @pytest.mark.asyncio
 async def test_fetch_data_solar(use_case, solar_repo):
     dates = ["2024-06-25", "2024-06-26"]
-    await use_case._fetch_data_for_period(dates, FetchSolarAndWindDataUseCase.RENEWABLE.SOLAR)
+    await use_case._fetch_data_for_period(dates, RenewablesETLUseCase.RENEWABLE.SOLAR)
     solar_repo.fetch_solar_data.assert_called_with("2024-06-26")
 
 @pytest.mark.asyncio
 async def test_fetch_data_wind(use_case, wind_repo):
     dates = ["2023-06-01", "2023-06-02"]
-    await use_case._fetch_data_for_period(dates, FetchSolarAndWindDataUseCase.RENEWABLE.WIND)
+    await use_case._fetch_data_for_period(dates, RenewablesETLUseCase.RENEWABLE.WIND)
     wind_repo.fetch_wind_data.assert_called_with("2023-06-02")
 
 def test_process_and_transform_data(use_case):
@@ -64,13 +63,13 @@ def test_get_week_dates(use_case):
 async def test_fetch_data_solar_api_failure(use_case, solar_repo):
     solar_repo.fetch_solar_data.side_effect = Exception("API Failure")
     with pytest.raises(Exception, match="API Failure"):
-        await use_case._fetch_data_for_period(["2024-06-25"], FetchSolarAndWindDataUseCase.RENEWABLE.SOLAR)
+        await use_case._fetch_data_for_period(["2024-06-25"], RenewablesETLUseCase.RENEWABLE.SOLAR)
 
 # Testing edge cases with empty data
 @pytest.mark.asyncio
 async def test_fetch_data_solar_empty_data(use_case, solar_repo):
     solar_repo.fetch_solar_data.return_value = []
-    data = await use_case._fetch_data_for_period(["2024-06-25"], FetchSolarAndWindDataUseCase.RENEWABLE.SOLAR)
+    data = await use_case._fetch_data_for_period(["2024-06-25"], RenewablesETLUseCase.RENEWABLE.SOLAR)
     assert data == [], "Expected empty data list when API returns no data"
 
 # Testing data type validation
