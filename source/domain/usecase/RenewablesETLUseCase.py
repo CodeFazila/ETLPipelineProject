@@ -59,8 +59,9 @@ class RenewablesETLUseCase:
                     result = await self.solar_repo.fetch_solar_data(date)
                 else:
                     result = await self.wind_repo.fetch_wind_data(date)
-                for record in result:
-                    results.append(record)
+                if result is not None:
+                    for record in result:
+                        results.append(record)
             except Exception as e:
                 logging.error(f"Exception when fetching data on {date}: {e}")
         return results
