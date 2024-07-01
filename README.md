@@ -62,7 +62,7 @@ The project is organized into several directories and key files for efficient na
 
 Comprehensive unit tests are included to ensure the functionality and reliability of the ETL process:
 
-- Run tests using: `pytest`.
+- Run tests using: `python -m pytest -vv`.
 - Tests cover each component of the ETL process, including data extraction, transformation, and loading.
 
 ## Dependencies
@@ -78,8 +78,14 @@ List of main libraries and tools used:
 
 The current ETL client architecture is robust and flexible, but there are several enhancements that can be made to accommodate growth, increase resilience, and improve efficiency. Here are the planned future enhancements:
 
-### Enhanced Retry Logic for API Client
-- **Proposed Enhancement**: Implement Retry Logic with Exponential Backoff.
+### Specifying Return Types for Repository Functions
+- To improve the clarity and predictability of the repository functions, I propose to explicitly specify return types using Python's type hints. This will not only aid in maintaining type safety but also enhance the readability and maintainability of our code.
+
+### Implementing Interfaces for Repositories
+- Usage of Python’s Abstract Base Classes (ABCs) to define interfaces for our repositories for further improvements. This approach will standardize our repository implementations, ensuring that all repositories adhere to a uniform structure and method signature. It will also facilitate the integration of new data sources as our application scales.
+
+### Adding Instance Type Checks in Use Case Constructor
+- To ensure that usecase interact with appropriate repository implementations, I suggest adding isinstance checks in the constructors of use cases. This will validate that the provided repository instances comply with the expected interfaces, thereby safeguarding against runtime errors and enhancing the robustness of our system.
 
 ### Automated Scheduling
 - **Implement a Scheduler**: Integrate a scheduling mechanism for automated weekly runs to ensure that data is consistently processed without manual intervention. Tools like Apache Airflow or cron jobs could be utilized for this purpose.
