@@ -79,3 +79,8 @@ def test_wrong_correct_wind_data_process_and_transform_data_pass(use_case):
                  'value': 13.251143780434838, 'Last Modified utc': '2024-06-23 00:00:00+00:00'}]
     processed_data = use_case._process_and_transform_data(raw_data, RenewablesETLUseCase.RENEWABLE.WIND)
     assert processed_data == (False, 0)
+
+def test_get_week_dates_pass(use_case):
+    expected_dates = ['2024-06-23', '2024-06-24', '2024-06-25', '2024-06-26', '2024-06-27', '2024-06-28', '2024-06-29']
+    calculated_dates = use_case._get_week_dates()
+    assert expected_dates == calculated_dates, f"Expected dates {expected_dates} do not match calculated dates {calculated_dates}"
