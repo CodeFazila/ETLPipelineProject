@@ -26,13 +26,12 @@ class RenewablesETLUseCase:
 
     async def _handle_wind_data(self, dates):
         data = await self._fetch_data_for_period(dates, self.RENEWABLE.WIND)
-        print(data)
-        transformed_data = self._process_and_transform_data(data)
+        transformed_data = self._process_and_transform_data(data, self.RENEWABLE.WIND)
         self.wind_repo.save_transformed_data(transformed_data)
 
     async def _handle_solar_data(self, dates):
         data = await self._fetch_data_for_period(dates, self.RENEWABLE.SOLAR)
-        transformed_data = self._process_and_transform_data(data)
+        transformed_data = self._process_and_transform_data(data, self.RENEWABLE.SOLAR)
         self.solar_repo.save_transformed_data(transformed_data)
 
     def _get_week_dates(self):
@@ -60,24 +59,19 @@ class RenewablesETLUseCase:
                 logging.error(f"Exception when fetching data on {date}: {e}")
         return results
 
-    def _process_and_transform_data(self, data, timestamp_key='Naive_Timestamp ', new_key='Timestamp_UTC'):
+    def _process_and_transform_data(self, data, renewable=RENEWABLE.SOLAR, timestamp_key='Naive_Timestamp ', new_key='Timestamp_UTC'):
         for record in data:
             try:
                 if timestamp_key in record:
-                    transformed_timestamp = self._transform_timestamp(record[timestamp_key])
+
+                    transformed_timestamp = ''
+                    if renewable == self.RENEWABLE.WIND:
+                        transformed_timestamp = parser.parse(record[timestamp_key]).astimezone(timezone.utc)
+                    else:
+                        transformed_timestamp = datetime.fromtimestamp(record[timestamp_key] / 1000, timezone.utc)
+
                     record[new_key] = transformed_timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')
                     del record[timestamp_key]
             except Exception as e:
                 logging.error(f"Failed to transform data for record {record}. Error: {str(e)}")
         return data
-
-    def _transform_timestamp(self, timestamp):
-        try:
-            if isinstance(timestamp, str):
-                return parser.parse(timestamp).astimezone(timezone.utc)
-            elif isinstance(timestamp, (int, float)):  # Unix timestamp in milliseconds
-                return datetime.fromtimestamp(timestamp / 1000, timezone.utc)
-            else:
-                raise TypeError(f"Unsupported timestamp type: {type(timestamp)}")
-        except Exception as e:
-            logging.error(f"Error transforming timestamp {timestamp}: {str(e)}")
