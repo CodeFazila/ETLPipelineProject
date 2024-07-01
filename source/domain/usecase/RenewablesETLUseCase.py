@@ -27,12 +27,14 @@ class RenewablesETLUseCase:
     async def _handle_wind_data(self, dates):
         data = await self._fetch_data_for_period(dates, self.RENEWABLE.WIND)
         transformed_data = self._process_and_transform_data(data, self.RENEWABLE.WIND)
-        self.wind_repo.save_transformed_data(transformed_data)
+        if transformed_data[0]:
+            self.wind_repo.save_transformed_data(transformed_data[1])
 
     async def _handle_solar_data(self, dates):
         data = await self._fetch_data_for_period(dates, self.RENEWABLE.SOLAR)
         transformed_data = self._process_and_transform_data(data, self.RENEWABLE.SOLAR)
-        self.solar_repo.save_transformed_data(transformed_data)
+        if transformed_data[0]:
+            self.solar_repo.save_transformed_data(transformed_data[1])
 
     def _get_week_dates(self):
         """Calculate the dates of the last full week ending on Saturday."""
@@ -61,6 +63,10 @@ class RenewablesETLUseCase:
 
     def _process_and_transform_data(self, data, renewable=RENEWABLE.SOLAR, timestamp_key='Naive_Timestamp ',
                                     new_key='Timestamp_UTC'):
+
+        if len(data) <= 0:
+            return False, 0
+
         for record in data:
             try:
                 if timestamp_key in record:
@@ -72,6 +78,11 @@ class RenewablesETLUseCase:
 
                     record[new_key] = transformed_timestamp.strftime('%Y-%m-%d %H:%M:%S %Z')
                     del record[timestamp_key]
+                else:
+                    return False, 0
+
             except Exception as e:
                 logging.error(f"Failed to transform data for record {record}. Error: {str(e)}")
-        return data
+                return False, 0
+
+        return True, data
