@@ -46,8 +46,12 @@ class RenewablesETLUseCase:
 
     async def _fetch_data_for_period(self, dates, renewable=RENEWABLE.SOLAR):
         """Fetch data for each date and renewable type."""
-        # tasks = [asyncio.create_task(self.solar_repo.fetch_solar_data(date)) for date in dates]
-        # return await asyncio.gather(*tasks, return_exceptions=True)
+        # if renewable == self.RENEWABLE.SOLAR:
+        #     tasks = [asyncio.create_task(self.solar_repo.fetch_solar_data(date)) for date in dates]
+        #     return await asyncio.gather(*tasks, return_exceptions=True)
+        # else:
+        #     tasks = [asyncio.create_task(self.wind_repo.fetch_wind_data(date)) for date in dates]
+        #     return await asyncio.gather(*tasks, return_exceptions=True)
         results = []
         for date in dates:
             try:
