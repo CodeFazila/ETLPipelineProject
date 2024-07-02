@@ -84,8 +84,11 @@ The current ETL client architecture is robust and flexible, but there are severa
 ### Implementing Interfaces for Repositories
 - Usage of Python’s Abstract Base Classes (ABCs) to define interfaces for our repositories for further improvements. This approach will standardize our repository implementations, ensuring that all repositories adhere to a uniform structure and method signature. It will also facilitate the integration of new data sources as our application scales.
 
-### Adding Instance Type Checks in Use Case Constructor
+### Adding Instance Type Checks in Usecase Constructor
 - To ensure that usecase interact with appropriate repository implementations, I suggest adding isinstance checks in the constructors of use cases. This will validate that the provided repository instances comply with the expected interfaces, thereby safeguarding against runtime errors and enhancing the robustness of our system.
+
+### Adding More Unit Test Cases for Bug Free Program
+- For further improvements, I propose adding more test cases to ensure that the program is bug-free and that all edge cases are thoroughly handled. 
 
 ### Automated Scheduling
 - **Implement a Scheduler**: Integrate a scheduling mechanism for automated weekly runs to ensure that data is consistently processed without manual intervention. Tools like Apache Airflow or cron jobs could be utilized for this purpose.
@@ -98,11 +101,6 @@ The current ETL client architecture is robust and flexible, but there are severa
 
 ### Big Data Handling
 - **Big Data Technologies**: If the data becomes substantial, consider integrating Big Data technologies such as Apache Hadoop or Apache Spark to efficiently process large datasets.
-
-### Robust Testing
-- **Integration Testing**: Develop comprehensive integration tests to ensure that all components of the system work together seamlessly.
-- **Performance Testing**: Regularly conduct performance testing to evaluate the system’s efficiency and responsiveness. 
-- **Scalability Testing**: Test the system’s ability to scale up with increased loads, ensuring that it can handle large volumes of data without performance degradation.
 
 ### Cloud Integration
 - **Cloud-Ready**: Prepare the architecture for possible migration to cloud platforms like AWS, Azure, or Google Cloud, to leverage their scalable infrastructure and big data processing services.
