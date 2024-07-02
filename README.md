@@ -60,10 +60,9 @@ The project is organized into several directories and key files for efficient na
 
 ## Testing
 
-Comprehensive unit tests are included to ensure the functionality and reliability of the ETL process:
+Unit tests are included to ensure the functionality and reliability of the ETL process especially transformation related code:
 
 - Run tests using: `python -m pytest -vv`.
-- Tests cover each component of the ETL process, including data extraction, transformation, and loading.
 
 ## Dependencies
 
