@@ -19,13 +19,14 @@ The ETL (Extract, Transform, Load) client for Solar and Wind data is architectur
 This layer encapsulates the core business logic of the application:
 
 #### Use Cases
-- **Purpose**: Use cases like `RenewablesETLUseCase` orchestrate the ETL process, detailing how data is fetched, processed, and stored.
+
+- **Purpose**: This layer encapsulates the core business logic of the application. Use cases like `RenewablesETLUseCase` orchestrate the ETL process, detailing how data is fetched, processed(transformation) and stored.
 
 ### 2. Data Layer
 
 #### Repositories
 
-- **Purpose**: Repositories serve as contracts for data access to the domain layer for data fetching and persistence.
+- **Purpose**: This layer manages data access and persistence. Repositories serve as contracts for data access, providing the domain layer with methods for fetching and persisting data.
 
 This structured approach not only facilitates easier testing and maintenance but also allows the system to adapt more smoothly to changes in data sources or business rules without extensive modifications. By keeping business logic separate from data access and external interactions, the ETL client remains flexible and robust against various challenges that might arise during its operation.
 
